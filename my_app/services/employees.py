@@ -1,5 +1,6 @@
 from ..utils.data_handler import DataHandler
 from datetime import datetime as dt
+from werkzeug.security import generate_password_hash
 
 class Employees:
     def __init__(self):
@@ -10,7 +11,7 @@ class Employees:
         return data
     
     def create(self, data: dict):
-        self.handler.create({** data, "created_at": dt.now()})
+        self.handler.create({** data, "password" : generate_password_hash(data.get("password")), "created_at": dt.now()})
 
     def delete(self, id):
         self.handler.delete(id)
