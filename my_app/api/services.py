@@ -1,11 +1,13 @@
 from flask import  jsonify, request
 from flask_smorest import Blueprint
+from flask_jwt_extended import jwt_required
 from ..services.services import Services
 from ..utils.validate import schemaValidate
 
 services_bp = Blueprint('services', __name__)
 
 @services_bp.route('/', methods=['GET'])
+@jwt_required()
 def get_services():
     services = Services()
     filters = request.args.to_dict()
@@ -24,6 +26,7 @@ def get_services():
     }), 200
 
 @services_bp.route('/<int:service_id>', methods=['GET'])
+@jwt_required()
 def get_service_by_id(service_id):
     services = Services()
     services = services.get_by_id(service_id)
@@ -41,6 +44,7 @@ def get_service_by_id(service_id):
 
 
 @services_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_service():
     data = request.json
 
@@ -55,6 +59,7 @@ def create_service():
     return jsonify({ "success": True }), 201
 
 @services_bp.route('/<int:service_id>', methods=['DELETE'])
+@jwt_required()
 def delete_service(service_id):
     services = Services()
     try:
@@ -70,6 +75,7 @@ def delete_service(service_id):
     return jsonify({ "success": True }), 200
 
 @services_bp.route('/<int:service_id>', methods=['PATCH'])
+@jwt_required()
 def update_service(service_id):
     data = request.json
     validation_error = schemaValidate(["id", "created_at"], data, False)
