@@ -1,4 +1,4 @@
-from flask import  jsonify, request
+from flask import jsonify, request
 from flask_smorest import Blueprint
 from flask_jwt_extended import jwt_required
 from ..services.services import Services
@@ -12,7 +12,6 @@ def get_services():
     services = Services()
     filters = request.args.to_dict()
     
-    services = Services()
     data = []
 
     if not filters:
@@ -29,7 +28,7 @@ def get_services():
 @jwt_required()
 def get_service_by_id(service_id):
     services = Services()
-    services = services.get_by_id(service_id)
+    service = services.get_by_id(service_id)
     if service: 
         return jsonify({
             "success": True,
